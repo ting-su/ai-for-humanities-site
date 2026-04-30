@@ -1,0 +1,11 @@
+<svg width="640" height="120" viewBox="0 0 640 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="640" height="120" rx="16" fill="#FAF7EF"/>
+  <path d="M40 79C68 32 112 20 166 36C203 47 231 40 252 19" stroke="#B10F1F" stroke-width="3" fill="none"/>
+  <path d="M40 92C75 65 118 61 165 78C202 91 230 84 258 58" stroke="#0F766E" stroke-width="3" fill="none"/>
+  <circle cx="58" cy="79" r="5" fill="#B10F1F"/>
+  <circle cx="166" cy="36" r="5" fill="#B10F1F"/>
+  <circle cx="258" cy="58" r="5" fill="#0F766E"/>
+  <text x="292" y="55" fill="#B10F1F" font-family="Georgia, 'Times New Roman', serif" font-size="36" font-weight="700" letter-spacing="-1.2">AI for</text>
+  <text x="292" y="93" fill="#202124" font-family="Georgia, 'Times New Roman', serif" font-size="40" font-weight="700" letter-spacing="-1.4">Humanities</text>
+  <rect x="292" y="103" width="226" height="3" fill="#B10F1F"/>
+</svg>

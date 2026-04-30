@@ -1,0 +1,1094 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>AI for Humanities</title>
+  <style>
+    :root {
+      --cmu-red: #b10f1f;
+      --cmu-red-dark: #7f0d16;
+      --ink: #202124;
+      --muted: #5f6368;
+      --paper: #faf7ef;
+      --white: #ffffff;
+      --line: #e7dfd1;
+      --teal: #0f766e;
+      --soft-red: #f8e8e7;
+      --soft-teal: #e7f3ef;
+      --shadow: 0 18px 50px rgba(73, 32, 22, 0.12);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      font-family: Georgia, "Times New Roman", serif;
+      color: var(--ink);
+      background:
+        linear-gradient(180deg, rgba(177, 15, 31, 0.06), transparent 420px),
+        var(--paper);
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .site-shell {
+      width: min(1160px, calc(100% - 40px));
+      margin: 0 auto;
+    }
+
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      border-bottom: 1px solid rgba(177, 15, 31, 0.12);
+      background: rgba(250, 247, 239, 0.92);
+      backdrop-filter: blur(14px);
+    }
+
+    .nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+      padding: 10px 0;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 13px;
+      min-width: 310px;
+    }
+
+    .brand img {
+      width: 74px;
+      height: auto;
+      border-radius: 0;
+      object-fit: contain;
+      opacity: 0.88;
+      mix-blend-mode: multiply;
+      box-shadow: none;
+    }
+
+    .brand-title {
+      color: var(--cmu-red);
+      font-size: 22px;
+      font-weight: 800;
+      letter-spacing: -0.035em;
+      line-height: 1;
+    }
+
+    nav {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    nav a {
+      border: 1px solid transparent;
+      border-radius: 999px;
+      color: var(--cmu-red-dark);
+      font-family: Arial, sans-serif;
+      font-size: 13px;
+      font-weight: 700;
+      padding: 9px 13px;
+    }
+
+    nav a:hover {
+      background: var(--white);
+      border-color: rgba(177, 15, 31, 0.18);
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: 1fr 0.98fr;
+      gap: 54px;
+      align-items: center;
+      min-height: calc(100vh - 74px);
+      padding: 46px 0 46px;
+    }
+
+    .kicker {
+      color: var(--cmu-red);
+      font-family: Arial, sans-serif;
+      font-size: 13px;
+      font-weight: 800;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      color: var(--cmu-red);
+      font-size: clamp(50px, 6.2vw, 78px);
+      letter-spacing: -0.045em;
+      line-height: 0.98;
+      margin: 10px 0 22px;
+      max-width: 760px;
+    }
+
+    h1::after {
+      content: "";
+      display: block;
+      width: 104px;
+      height: 4px;
+      background: linear-gradient(90deg, var(--cmu-red), var(--teal));
+      margin-top: 18px;
+    }
+
+    .subtitle {
+      color: var(--teal);
+      font-family: Arial, sans-serif;
+      font-size: clamp(15px, 1.5vw, 18px);
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      line-height: 1.45;
+      margin: 0 0 24px;
+      max-width: 620px;
+      text-transform: uppercase;
+    }
+
+    .hero p {
+      color: #404040;
+      font-size: 16.6px;
+      line-height: 1.5;
+      max-width: 690px;
+      margin: 0 0 14px;
+    }
+
+    .question-card {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin: 20px 0 0;
+    }
+
+    .question {
+      border-left: 5px solid var(--cmu-red);
+      background: rgba(255, 255, 255, 0.75);
+      box-shadow: 0 10px 30px rgba(50, 24, 14, 0.06);
+      padding: 14px 16px;
+      font-size: 15.5px;
+      line-height: 1.35;
+    }
+
+    .hero-expansion {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      margin-top: 28px;
+    }
+
+    .hero-pill {
+      border: 1px solid rgba(177, 15, 31, 0.14);
+      background: rgba(255, 255, 255, 0.78);
+      box-shadow: 0 10px 28px rgba(73, 32, 22, 0.06);
+      padding: 18px;
+    }
+
+    .hero-pill span {
+      display: block;
+      color: var(--cmu-red);
+      font-family: Arial, sans-serif;
+      font-size: 11px;
+      font-weight: 900;
+      letter-spacing: 0.12em;
+      margin-bottom: 8px;
+      text-transform: uppercase;
+    }
+
+    .hero-pill p {
+      color: #363636;
+      font-size: 15.5px;
+      line-height: 1.55;
+      margin: 0;
+    }
+
+    .hero-visual {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 18px;
+      min-height: auto;
+      position: relative;
+      transform: translate(38px, 42px);
+    }
+
+    .hero-visual::before {
+      content: "";
+      position: absolute;
+      inset: 22px -16px -14px 34px;
+      border: 1px solid rgba(177, 15, 31, 0.16);
+      background: linear-gradient(135deg, rgba(177, 15, 31, 0.08), rgba(15, 118, 110, 0.06));
+      z-index: -1;
+    }
+
+    .visual-panel {
+      border: 1px solid rgba(177, 15, 31, 0.14);
+      background: rgba(255, 255, 255, 0.88);
+      box-shadow: 0 16px 42px rgba(73, 32, 22, 0.09);
+      min-height: 205px;
+      padding: 22px;
+    }
+
+    .visual-panel span {
+      color: var(--cmu-red);
+      display: block;
+      font-family: Arial, sans-serif;
+      font-size: 10.5px;
+      font-weight: 900;
+      letter-spacing: 0.13em;
+      margin-bottom: 9px;
+      text-transform: uppercase;
+    }
+
+    .visual-panel p {
+      color: #303030;
+      font-size: 15.5px;
+      line-height: 1.45;
+      margin: 0;
+    }
+
+    .section {
+      padding: 76px 0;
+      border-top: 1px solid rgba(177, 15, 31, 0.11);
+    }
+
+    .section-head {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 30px;
+      margin-bottom: 34px;
+    }
+
+    .section h2 {
+      color: var(--cmu-red);
+      font-size: clamp(34px, 5vw, 54px);
+      letter-spacing: -0.05em;
+      line-height: 0.95;
+      margin: 0;
+    }
+
+    .section-note {
+      color: var(--muted);
+      font-family: Arial, sans-serif;
+      font-size: 14px;
+      line-height: 1.55;
+      max-width: 420px;
+    }
+
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+
+    .professor-card,
+    .project-card,
+    .info-card {
+      border: 1px solid rgba(177, 15, 31, 0.13);
+      background: rgba(255, 255, 255, 0.82);
+      box-shadow: 0 12px 36px rgba(73, 32, 22, 0.08);
+    }
+
+    .professor-card {
+      min-height: 430px;
+      padding: 20px;
+    }
+
+    .professor-top {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      margin-bottom: 14px;
+    }
+
+    .avatar {
+      display: grid;
+      place-items: center;
+      flex: 0 0 auto;
+      width: 84px;
+      height: 84px;
+      border: 2px solid rgba(177, 15, 31, 0.18);
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--soft-red), var(--white));
+      color: var(--cmu-red);
+      font-family: Arial, sans-serif;
+      font-size: 24px;
+      font-weight: 900;
+      overflow: hidden;
+    }
+
+    .avatar img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .professor-card h3,
+    .project-card h3,
+    .info-card h3 {
+      color: var(--cmu-red-dark);
+      font-size: 25px;
+      line-height: 1.08;
+      margin: 0;
+    }
+
+    .project-card h3 a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .project-card h3 a:hover {
+      color: var(--cmu-red);
+      text-decoration: underline;
+      text-decoration-thickness: 1px;
+      text-underline-offset: 4px;
+    }
+
+    .role {
+      color: var(--teal);
+      font-family: Arial, sans-serif;
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      line-height: 1.45;
+      margin-top: 6px;
+      text-transform: uppercase;
+    }
+
+    .professor-card p,
+    .project-card p,
+    .info-card p {
+      color: #363636;
+      font-size: 14.2px;
+      line-height: 1.48;
+      margin: 12px 0 0;
+    }
+
+    .professor-card p a {
+      color: var(--cmu-red-dark);
+      font-weight: 800;
+      text-decoration: underline;
+      text-decoration-thickness: 1px;
+      text-underline-offset: 3px;
+    }
+
+    .professor-card p a:hover {
+      color: var(--cmu-red);
+    }
+
+    .tag-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 14px;
+    }
+
+    .tag {
+      border: 1px solid rgba(15, 118, 110, 0.18);
+      border-radius: 999px;
+      background: var(--soft-teal);
+      color: var(--teal);
+      font-family: Arial, sans-serif;
+      font-size: 10px;
+      font-weight: 800;
+      padding: 6px 9px;
+    }
+
+    .quote-band {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 20px;
+    }
+
+    blockquote {
+      margin: 0;
+      border-left: 5px solid var(--cmu-red);
+      background: var(--white);
+      box-shadow: 0 12px 36px rgba(73, 32, 22, 0.08);
+      color: #303030;
+      font-size: 20px;
+      line-height: 1.55;
+      padding: 26px;
+    }
+
+    blockquote cite {
+      display: block;
+      color: var(--muted);
+      font-family: Arial, sans-serif;
+      font-size: 13px;
+      font-style: normal;
+      font-weight: 700;
+      margin-top: 16px;
+    }
+
+    .project-card {
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .project-card img {
+      width: 100%;
+      height: 230px;
+      object-fit: cover;
+      background: var(--soft-red);
+    }
+
+    .project-card .project-body {
+      padding: 22px;
+    }
+
+    .info-card {
+      padding: 24px;
+    }
+
+    .info-card strong {
+      color: var(--cmu-red-dark);
+    }
+
+    .card-image {
+      display: block;
+      width: 100%;
+      aspect-ratio: 16 / 10;
+      margin-top: 18px;
+      border: 1px solid rgba(177, 15, 31, 0.12);
+      box-shadow: 0 10px 24px rgba(73, 32, 22, 0.08);
+      object-fit: cover;
+    }
+
+    #structure .info-card {
+      display: flex;
+      flex-direction: column;
+    }
+
+    #structure .micro-list {
+      margin-bottom: 18px;
+    }
+
+    #structure .card-image {
+      margin-top: auto;
+    }
+
+    .micro-list {
+      display: grid;
+      gap: 8px;
+      margin: 16px 0 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .micro-list li {
+      border-left: 3px solid var(--teal);
+      color: #4a4642;
+      font-family: Arial, sans-serif;
+      font-size: 12.5px;
+      line-height: 1.35;
+      padding-left: 10px;
+    }
+
+    .pathway-label {
+      color: var(--cmu-red);
+      display: inline-block;
+      font-family: Arial, sans-serif;
+      font-size: 11px;
+      font-weight: 900;
+      letter-spacing: 0.12em;
+      margin-bottom: 10px;
+      text-transform: uppercase;
+    }
+
+    .text-link {
+      color: var(--cmu-red-dark);
+      font-weight: 800;
+      text-decoration: underline;
+      text-decoration-thickness: 1px;
+      text-underline-offset: 3px;
+    }
+
+    .coverage-card {
+      display: grid;
+      grid-template-columns: 0.78fr 1.22fr;
+      gap: 38px;
+      align-items: center;
+      border: 1px solid rgba(177, 15, 31, 0.13);
+      background: rgba(255, 255, 255, 0.84);
+      box-shadow: 0 12px 36px rgba(73, 32, 22, 0.08);
+      padding: 38px;
+    }
+
+    .coverage-images {
+      display: grid;
+      gap: 14px;
+    }
+
+    .coverage-images img {
+      width: 100%;
+      border: 1px solid rgba(177, 15, 31, 0.12);
+      background: white;
+      box-shadow: 0 10px 28px rgba(73, 32, 22, 0.08);
+      object-fit: cover;
+    }
+
+    .coverage-images img:first-child {
+      max-height: 260px;
+      object-fit: contain;
+    }
+
+    .coverage-images img:last-child {
+      height: 210px;
+      max-height: none;
+      object-fit: cover;
+      object-position: center;
+    }
+
+    .coverage-card h2 {
+      color: var(--cmu-red);
+      font-size: clamp(32px, 4.2vw, 48px);
+      letter-spacing: -0.04em;
+      line-height: 0.96;
+      margin: 0 0 18px;
+    }
+
+    .coverage-card h3 {
+      color: var(--teal);
+      font-family: Arial, sans-serif;
+      font-size: 12px;
+      font-weight: 900;
+      letter-spacing: 0.14em;
+      margin: 0 0 12px;
+      text-transform: uppercase;
+    }
+
+    .coverage-card p {
+      color: #363636;
+      font-size: 16.5px;
+      line-height: 1.58;
+      margin: 0 0 14px;
+    }
+
+    .syllabus-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+
+    .list {
+      display: grid;
+      gap: 12px;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .list li {
+      border-left: 4px solid var(--cmu-red);
+      background: rgba(255,255,255,0.78);
+      color: #333;
+      line-height: 1.55;
+      padding: 13px 15px;
+    }
+
+    .newsletter-list {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+    }
+
+    .newsletter {
+      border: 1px solid rgba(177, 15, 31, 0.13);
+      background: var(--white);
+      min-height: 130px;
+      padding: 18px;
+    }
+
+    .newsletter span {
+      color: var(--cmu-red);
+      font-family: Arial, sans-serif;
+      font-size: 12px;
+      font-weight: 900;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    .newsletter h3 {
+      color: var(--cmu-red-dark);
+      font-size: 22px;
+      margin: 22px 0 0;
+    }
+
+    .voices-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 22px;
+      align-items: stretch;
+    }
+
+    .voice-card {
+      border: 1px solid rgba(177, 15, 31, 0.13);
+      background: rgba(255, 255, 255, 0.86);
+      box-shadow: 0 12px 36px rgba(73, 32, 22, 0.08);
+      padding: 24px;
+    }
+
+    .voice-card blockquote {
+      border: 0;
+      background: transparent;
+      box-shadow: none;
+      color: #303030;
+      font-size: 16.8px;
+      line-height: 1.52;
+      padding: 0;
+    }
+
+    .voice-card cite {
+      color: var(--cmu-red-dark);
+      display: block;
+      font-family: Arial, sans-serif;
+      font-size: 13px;
+      font-style: normal;
+      font-weight: 900;
+      letter-spacing: 0.08em;
+      margin-top: 18px;
+      text-transform: uppercase;
+    }
+
+    .source-footer {
+      border-top: 1px solid rgba(177, 15, 31, 0.12);
+      color: var(--ink);
+      font-family: Arial, sans-serif;
+      font-size: 13px;
+      line-height: 1.8;
+      padding: 44px 0 52px;
+      text-align: center;
+    }
+
+    .footer-title {
+      color: var(--cmu-red);
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 22px;
+      font-weight: 800;
+      letter-spacing: -0.035em;
+      margin: 0 0 6px;
+    }
+
+    .footer-location {
+      color: var(--muted);
+      margin: 0 0 12px;
+    }
+
+    .footer-links {
+      display: flex;
+      justify-content: center;
+      gap: 18px;
+      margin: 0 0 18px;
+    }
+
+    .source-footer a {
+      color: var(--cmu-red-dark);
+      font-weight: 800;
+      text-decoration: none;
+    }
+
+    .source-footer a:hover {
+      text-decoration: underline;
+      text-underline-offset: 3px;
+    }
+
+    .footer-copy {
+      color: var(--muted);
+      margin: 0;
+    }
+
+    @media (max-width: 900px) {
+      .hero,
+      .grid-3,
+      .quote-band,
+      .syllabus-grid,
+      .newsletter-list,
+      .coverage-card,
+      .voices-grid,
+      .hero-expansion {
+        grid-template-columns: 1fr;
+      }
+
+      .hero {
+        min-height: auto;
+        padding-top: 46px;
+      }
+
+      .hero-visual {
+        min-height: auto;
+        transform: none;
+      }
+
+      .section-head {
+        align-items: start;
+        flex-direction: column;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .site-shell {
+        width: min(100% - 24px, 1160px);
+      }
+
+      .nav {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      nav {
+        justify-content: flex-start;
+      }
+
+      .hero-visual {
+        min-height: auto;
+      }
+
+      .question-card {
+        grid-template-columns: 1fr;
+      }
+
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="site-shell nav">
+      <a class="brand" href="#home" aria-label="AI for Humanities home">
+        <img src="assets/media_logo_cropped.png" alt="AI for Humanities"><span class="brand-title">AI for Humanities</span>
+      </a>
+      <nav aria-label="Site navigation">
+        <a href="#home">Home</a>
+        <a href="#professors">Team</a>
+        <a href="#structure">Pathway</a>
+        <a href="#outcomes" hidden>Lens</a>
+        <a href="#projects">AI4H Lab</a>
+        <a href="#voices">Echoes</a>
+        </nav>
+    </div>
+  </header>
+
+  <main id="home">
+    <section class="site-shell hero">
+      <div>
+        <h1>AI for Humanities</h1>
+        <p class="subtitle">The multi-dimensions of world languages, arts, and cultures.</p>
+        <p>
+          This interdisciplinary course examines Artificial Intelligence as both a creative medium and a cultural force. Students explore how AI can expand humanities research, teaching, and public-facing applications while asking how the humanities can shape more responsible, reflective, and human-centered AI.
+        </p>
+        <p>
+          Through guest lectures, discussion-based seminars, hands-on workshops, and collaborative projects, the course connects world languages, arts, cultural analysis, storytelling, design, ethics, and emerging technology. Students learn to move between technical experimentation and humanistic interpretation, using AI not only as a tool, but also as a subject of inquiry.
+        </p>
+        <div class="question-card" aria-label="Central course questions">
+          <div class="question">How can AI enrich the field of Humanities research, teaching, and applications?</div>
+          <div class="question">What perspectives can Humanities studies offer to the development of AI?</div>
+        </div>
+      </div>
+      <div class="hero-visual" aria-label="Course highlights">
+        <div class="visual-panel">
+          <span>Course Mode</span>
+          <p>Expert-led lectures, seminar discussions, creative workshops, and a team-based capstone project.</p>
+        </div>
+        <div class="visual-panel">
+          <span>Student Output</span>
+          <p>AI for Humanities projects that combine cultural insight, ethical reflection, and prototype-driven making.</p>
+        </div>
+        <div class="visual-panel">
+          <span>Core Tension</span>
+          <p>AI can generate, classify, predict, and simulate. Humanities asks what these systems mean, whom they serve, and how they shape human agency.</p>
+        </div>
+        <div class="visual-panel">
+          <span>Learning Goal</span>
+          <p>Develop the literacy to use AI creatively and the judgment to evaluate its cultural, social, and ethical consequences.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="media">
+      <div class="site-shell">
+        <article class="coverage-card">
+          <div class="coverage-images">
+            <img src="assets/hero_image_v2.png" alt="The Piper feature about AI for Humanities">
+            <img src="news_assets/news_03.jpg" alt="AI for Humanities students standing in front of a watercolor painting">
+          </div>
+          <div>
+            <h2>Featured Across CMU</h2>
+            <h3>The Piper + CMU Engineering</h3>
+            <p>
+              AI for Humanities was featured by <strong>The Piper</strong>, CMU’s internal newsletter, in the July 11, 2024 story “New Dietrich Course Harnesses AI To Kindle Creativity,” which introduces the course as preparing the next generation to understand AI’s impact from a human perspective.
+            </p>
+            <p>
+              The College of Engineering article <a class="text-link" href="https://engineering.cmu.edu/news-events/news/2024/06/18-ai-for-humanities.html" target="_blank" rel="noreferrer">“New course harnesses AI to kindle creativity”</a> further describes how the course explores AI’s role in creative expression, cultural understanding, and human-centered technology education.
+            </p>
+            <p>
+              Together, the features frame the course around three linked areas: large language models and creative writing, generative models and artistic expression, and social and cultural voyages with AI.
+            </p>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="section" id="professors">
+      <div class="site-shell">
+        <div class="section-head">
+          <h2>Team</h2>
+        </div>
+        <div class="grid-3">
+          <article class="professor-card">
+            <div class="professor-top">
+              <div class="avatar"><img src="assets/ting_su.jpg" alt="Ting Su"></div>
+              <div>
+                <h3>Ting Su</h3>
+                <div class="role">Special Faculty, Carnegie Mellon University</div>
+              </div>
+            </div>
+            <p>
+              Ting Su is a Special Faculty member at Carnegie Mellon University, co-founder of the <a href="https://enlightenfutures.org/" target="_blank" rel="noreferrer">Enlighten Futures Initiative</a>, and founder and CEO of <a href="https://supacademy.ai/" target="_blank" rel="noreferrer">Supacademy</a>. Her work develops new paradigms for humanities and aesthetic education in the age of artificial intelligence, emphasizing human wisdom, ethical agency, cultural depth, and technological imagination.
+            </p>
+            <p>
+              She leads the <a href="https://innovares.tech/research-program/" target="_blank" rel="noreferrer">INNOVARES Interdisciplinary Research Program</a> and contributes to Carnegie Mellon’s <a href="https://www.cmu.edu/pre-college/academic-programs/gcet.html" target="_blank" rel="noreferrer">Global Cultures and Emerging Technology</a> ecosystem. Across her work, she advances “worldmaking” as a central intellectual practice for exploring how computational systems and humanistic inquiry shape knowledge, meaning, and agency.
+            </p>
+            <div class="tag-row">
+              <span class="tag">AI + Humanities</span>
+              <span class="tag">Aesthetic Education</span>
+              <span class="tag">Worldmaking</span>
+            </div>
+          </article>
+
+          <article class="professor-card">
+            <div class="professor-top">
+              <div class="avatar"><img src="assets/gang_liu.png" alt="Gang Liu"></div>
+              <div>
+                <h3>Gang Liu</h3>
+                <div class="role">Director of Undergraduate Studies, LCAL, CMU</div>
+              </div>
+            </div>
+            <p>
+              <a href="https://www.cmu.edu/dietrich/lcal/about-us/filter/faculty/gang-liu.html" target="_blank" rel="noreferrer">Gang Liu</a> is a Teaching Professor of Chinese Studies at Carnegie Mellon University and the Director of Undergraduate Studies in the Department of Languages, Cultures and Applied Linguistics. He has developed and taught Chinese language courses at all levels and content courses spanning language, culture, poetry, thought, documentary film, popular culture, and digital media.
+            </p>
+            <p>
+              His interdisciplinary teaching includes <em>AI for Humanities</em>, <em>Multimedia Narratives</em>, <em>Story + Game Lab</em>, VR/AR storytelling, and Chinese mythology animation creation. He co-edited or authored four books published by Peking University Press and is the author of the bestselling children’s book series <em>Luoluo Ting’s Adventure in Ancient Chinese Mythology</em>.
+            </p>
+            <div class="tag-row">
+              <span class="tag">Chinese Studies</span>
+              <span class="tag">Digital Storytelling</span>
+              <span class="tag">Mythology</span>
+            </div>
+          </article>
+
+          <article class="professor-card">
+            <div class="professor-top">
+              <div class="avatar"><img src="assets/image_08.jpg" alt="Ding Zhao"></div>
+              <div>
+                <h3>Ding Zhao</h3>
+                <div class="role">Associate Professor, Mechanical Engineering, CMU</div>
+              </div>
+            </div>
+            <p>
+              <a href="https://www.meche.engineering.cmu.edu/directory/bios/zhao-ding.html" target="_blank" rel="noreferrer">Ding Zhao</a> is an Associate Professor in Carnegie Mellon University’s Department of Mechanical Engineering, with courtesy appointments in Civil and Environmental Engineering, the Computer Science Department, and the Robotics Institute. He leads the <a href="https://safeai-lab.github.io/" target="_blank" rel="noreferrer">CMU Safe AI Laboratory</a>, which develops trustworthy AI for high-stakes physical systems.
+            </p>
+            <p>
+              His research connects machine learning theory with engineering systems for autonomous vehicles, robotics, sustainable grids, healthcare, manufacturing, and care applications. At CMU, Zhao also created the <a href="https://engineering.cmu.edu/news-events/news/2024/07/29-trustworthy-ai.html" target="_blank" rel="noreferrer">Trustworthy AI Autonomy</a> course, strengthening the bridge between humanities questions about responsibility and engineering methods for safety.
+            </p>
+            <div class="tag-row">
+              <span class="tag">Safe AI</span>
+              <span class="tag">Robotics</span>
+              <span class="tag">Trustworthy Autonomy</span>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="structure">
+      <div class="site-shell">
+        <div class="section-head">
+          <h2>Pathway</h2>
+        </div>
+        <div class="grid-3">
+          <article class="info-card">
+            <span class="pathway-label">01 / Expert Input</span>
+            <h3>Lecture</h3>
+            <p>Students engage with experts from CMU and industry to understand how AI reshapes language, art, culture, creativity, ethics, and human-centered technology.</p>
+            <ul class="micro-list">
+              <li>Guest speakers from humanities, engineering, business, policy, and language technology.</li>
+              <li>Case studies on generative AI, causality, robotics, creative systems, and social impact.</li>
+              <li>Short response prompts connect technical ideas with cultural questions.</li>
+            </ul>
+            <img class="card-image" src="assets/lecture_expert_beibei_card.jpg" alt="Guest lecture on AI, causality, and policy making">
+          </article>
+          <article class="info-card">
+            <span class="pathway-label">02 / Guided Practice</span>
+            <h3>Workshop</h3>
+            <p>Each topic is followed by in-depth discussion, experimentation, and seminar-style activities that connect AI tools with humanistic interpretation.</p>
+            <ul class="micro-list">
+              <li>Students test AI tools through writing, visual generation, data interpretation, and critique.</li>
+              <li>Seminars ask what AI reveals, hides, amplifies, or distorts about culture.</li>
+              <li>Prototype sketches turn abstract questions into visible design directions.</li>
+            </ul>
+            <img class="card-image" src="assets/workshop_card.jpg" alt="Workshop session on AI prototyping and discussion">
+          </article>
+          <article class="info-card">
+            <span class="pathway-label">03 / Public Artifact</span>
+            <h3>Capstone Project</h3>
+            <p>Students form teams to develop original AI for Humanities projects that synthesize technical exploration, cultural analysis, and creative production.</p>
+            <ul class="micro-list">
+              <li>Teams define a humanistic problem, audience, dataset, and creative or analytical method.</li>
+              <li>Projects combine research framing, AI experimentation, ethical reflection, and storytelling.</li>
+              <li>Final work is presented as a prototype, research narrative, or venture-style concept.</li>
+            </ul>
+            <img class="card-image" src="assets/capstone_project_card.jpg" alt="Students collaborating on an AI for Humanities capstone project">
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="outcomes" hidden>
+      <div class="site-shell">
+        <div class="section-head">
+          <h2>Lens</h2>
+        </div>
+        <div class="grid-3">
+          <article class="info-card">
+            <h3>Machine Imagination</h3>
+            <p>Gain a comprehensive understanding of AI technologies and develop knowledge and skills to leverage AI for advancing humanities scholarship and conducting collaborative projects.</p>
+          </article>
+          <article class="info-card">
+            <h3>Ethical Analysis</h3>
+            <p>Explore the relationship between AI and the humanities, learning to analyze, evaluate, and articulate the ethical implications of AI integration in humanistic contexts.</p>
+          </article>
+          <article class="info-card">
+            <h3>Interdisciplinary Synthesis</h3>
+            <p>Formulate approaches that bridge AI and humanities, synthesizing perspectives from both domains to address complex interdisciplinary challenges.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="projects">
+      <div class="site-shell">
+        <div class="section-head">
+          <h2>AI4H Lab</h2>
+        </div>
+        <div class="grid-3">
+          <article class="project-card">
+            <img src="project_screenshots/toledo_card.jpg" alt="Screenshot of ToledoAI scientific translation project">
+            <div class="project-body">
+              <h3><a href="https://www.toledo-ai.com/" target="_blank" rel="noopener">ToledoAI</a></h3>
+              <p>A scientific translation platform designed to make research more globally accessible. Students framed language as an equity issue in knowledge production, combining document translation, domain-specific terminology, and interactive reading support.</p>
+            </div>
+          </article>
+          <article class="project-card">
+            <img src="project_screenshots/argumate_card.jpg" alt="Screenshot of ArguMate debate coach project">
+            <div class="project-body">
+              <h3><a href="https://argu-mate.com/" target="_blank" rel="noopener">ArguMate</a></h3>
+              <p>An AI debate coach that helps students practice argumentation with lifelike opponents, speech-to-text input, real-time feedback, and voice responses. The project turns persuasive communication into an interactive learning loop.</p>
+            </div>
+          </article>
+          <article class="project-card">
+            <img src="project_screenshots/growthdm_card.jpg" alt="Screenshot of GrowthDM marketing strategy project">
+            <div class="project-body">
+              <h3><a href="https://growthdm.netlify.app/" target="_blank" rel="noopener">GrowthDM</a></h3>
+              <p>A growth strategy assistant that uses AI to translate business context into content ideas, campaign plans, and marketing recommendations. It demonstrates how students can build practical workflow tools around audience, budget, goals, and constraints.</p>
+            </div>
+          </article>
+          <article class="project-card">
+            <img src="project_screenshots/languagepi_card.jpg" alt="Screenshot of Cherokee and Quechua Translator project">
+            <div class="project-body">
+              <h3><a href="https://language-pi.vercel.app/" target="_blank" rel="noopener">Language Pi</a></h3>
+              <p>A Cherokee and Quechua translation assistant focused on low-resource and Indigenous language access. The project connects AI prototyping with cultural preservation, language learning, and questions of representation in computational systems.</p>
+            </div>
+          </article>
+          <article class="project-card">
+            <img src="project_screenshots/atissue_card.jpg" alt="Screenshot of At Issue AI-powered news analysis project">
+            <div class="project-body">
+              <h3><a href="https://atissue.replit.app/" target="_blank" rel="noopener">At Issue</a></h3>
+              <p>An AI-powered news analysis tool that helps users explore current issues through multiple perspectives, stakeholder viewpoints, key questions, and contextual Q&A. It reframes news literacy as a practice of comparison and interpretation.</p>
+            </div>
+          </article>
+          <article class="project-card">
+            <img src="project_screenshots/scoliosisai_card.jpg" alt="Screenshot of ScoliosisAI early detection project">
+            <div class="project-body">
+              <h3><a href="https://www.scoliosisai.com/" target="_blank" rel="noopener">ScoliosisAI</a></h3>
+              <p>A student patient-led project that uses mobile apps, AI capabilities, phone-based measurement, and community support to make early scoliosis detection more convenient and accessible for households around the world.</p>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="voices">
+      <div class="site-shell">
+        <div class="section-head">
+          <h2>Echoes</h2>
+        </div>
+        <div class="voices-grid">
+          <article class="voice-card">
+            <blockquote>
+              “Unlike the restrictive approach often taken towards generative AI, Professor Su encouraged us to explore and utilize these tools, emphasizing their potential to enhance learning and innovation.”
+              <cite>Bryan · 2024 Summer 2</cite>
+            </blockquote>
+          </article>
+          <article class="voice-card">
+            <blockquote>
+              “Most of my exposure to artificial intelligence was in classroom settings, so it’s interesting to learn about the societal impacts.”
+              <cite>Jamie · 2024 Spring</cite>
+            </blockquote>
+          </article>
+          <article class="voice-card">
+            <blockquote>
+              “I truly enjoyed every session and learned so much about the field. Your teaching style and dedication made the class both engaging and highly informative.”
+              <cite>Ryan · 2024 Summer</cite>
+            </blockquote>
+          </article>
+          <article class="voice-card">
+            <blockquote>
+              “The program gave me a comprehensive understanding of the relationship between AI and humanities, including arts and language. It allowed me to step out of my comfort zone.”
+              <cite>Keynes · 2024 Summer</cite>
+            </blockquote>
+          </article>
+          <article class="voice-card">
+            <blockquote>
+              “I realized the powerful potential of Digital Humanities—technology and humanism are not opposites, but forces that can truly intertwine and illuminate one another.”
+              <cite>Everly · 2025 Summer</cite>
+            </blockquote>
+          </article>
+          <article class="voice-card">
+            <blockquote>
+              “This class was far more than just a learning experience for me; it was a gateway to exploring the powerful intersection of AI technology and the humanities.”
+              <cite>Sue · 2025 Summer</cite>
+            </blockquote>
+          </article>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="source-footer">
+    <div class="site-shell">
+      <p class="footer-title">AI for Humanities</p>
+      <p class="footer-location">Pittsburgh, PA</p>
+      <p class="footer-links">
+        <a href="mailto:tingsu@cmu.edu">Contact</a>
+        <a href="https://www.linkedin.com/" target="_blank" rel="noreferrer">LinkedIn</a>
+        <a href="#professors">Partners</a>
+      </p>
+      <p class="footer-copy">© 2025 AI for Humanities. All rights reserved.</p>
+    </div>
+  </footer>
+</body>
+</html>
